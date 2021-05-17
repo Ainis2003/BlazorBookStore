@@ -1,0 +1,24 @@
+﻿@page "/books"
+@inject WebApplication.Data.IBookService BookService;
+
+<h1>Books</h1>
+<br />
+<div class="card-deck">
+        @foreach(var book in books)
+            {
+         <div class="card m-3" style="min-width: 18rem; max-width:30.5%; min-height: 18rem; max-height:50%;">
+            <h2 style="text-align: center; position: absolute; top: 5%; align-self:center">@book.Title</h2>
+            <h3 style="text-align: center; position: absolute; top: 50%; align-self: center">Rating: @book.Rating</h3>
+            <a href="book/@book.Id" class="btn btn-primary" style="max-width: 30%; align-self: center; position: absolute; bottom: 5%">View</a>
+             </div>
+            }
+</div>
+
+@code {
+    private List<WebApplication.Data.Book> books;
+
+    protected override void OnInitialized()
+    {
+        books = BookService.GetBooks();
+    }
+}

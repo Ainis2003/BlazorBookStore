@@ -1,0 +1,51 @@
+﻿@page "/book/{id}"
+@inject WebApplication.Data.IBookService BookService
+@inject NavigationManager Navigation
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>AuthorId</td>
+            <td>Title</td>
+            <td>Description</td>
+            <td>Release Date</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@book.Id</td>
+            <td>@book.AuthorId</td>
+            <td>@book.Title</td>
+            <td>@book.Description</td>
+            <td>@book.ReleaseDate.ToShortDateString()</td>
+        </tr>
+    </tbody>
+</table>
+
+<EditForm Model="book" OnSubmit="@SubmitForm">
+    <div class="form-group">
+        <label>Rate this book:</label>
+        <br />
+        <InputNumber Rating="rate" class="form-control" rate="rate" min="1" max="5" @bind-Value="book.Rating" style="min-width: 20rem; max-width: 30%">Input number here (1 to 5)</InputNumber>
+    </div>
+    <button type="submit" class="btn btn-primary">Rate</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private WebApplication.Data.Book book { get; set; }
+
+    protected override void OnInitialized()
+    {
+        book = BookService.GetBook(int.Parse(Id));
+    }
+
+    private void SubmitForm()
+    {
+        BookService.UpdateBook(book);
+        Navigation.NavigateTo("books");
+    }
+}

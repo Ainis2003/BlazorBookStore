@@ -1,0 +1,89 @@
+﻿@page "/authors" 
+@inject WebApplication.Data.IAuthorService AuthorService
+@inject WebApplication.Data.IBookService BookService
+
+<h1>Authors</h1>
+<br />
+<table class="table">
+    <thead>
+        <tr style="font-size:20px; font-weight: bold">
+            <td>Id</td>
+            <td>Pen Name</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Email Address</td>
+            <td>Books</td>
+            <td>Rating</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var author in authors)
+        {
+            <tr style="font-weight: bold">
+                <td>@author.Id</td>
+                <td>@author.PenName</td>
+                <td>@author.FirstName</td>
+                <td>@author.LastName</td>
+                <td>@author.EmailAddress</td>
+                <td></td>
+                <td></td>
+            </tr>
+            @foreach (var book in books)
+                @if (author.Id == book.AuthorId)
+                {
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>@book.Title</td>
+                        <td>Rating: @book.Rating</td>
+                    </tr>
+
+                    @if (book.Rating != 0)
+                    {
+                        stars += book.Rating;
+                        booknum++;
+                    }
+
+                }
+
+                @if (stars != 0 && booknum != 0)
+                {
+                    rate = stars / booknum;
+                }
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Average book rating: @rate</td>
+                </tr>
+
+                {
+                    stars = 0;
+                    booknum = 0;
+                }
+
+            }
+    </tbody>
+</table>
+
+@code {
+    private List<WebApplication.Data.Author> authors;
+    private List<WebApplication.Data.Book> books;
+
+    protected override void OnInitialized()
+    {
+        authors = AuthorService.GetAuthors();
+        books = BookService.GetBooks();
+    }
+
+    public double stars = 0;
+    public int booknum = 0;
+    public double rate = 0;
+}
