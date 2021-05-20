@@ -1,4 +1,4 @@
-﻿@page "/authors" 
+@page "/authors" 
 @inject WebApplication.Data.IAuthorService AuthorService
 @inject WebApplication.Data.IBookService BookService
 
@@ -28,7 +28,12 @@
                 <td></td>
                 <td></td>
             </tr>
+            {
+                stars = 0;
+                booknum = 0;
+            }
             @foreach (var book in books)
+            {
                 @if (author.Id == book.AuthorId)
                 {
                     <tr>
@@ -48,10 +53,14 @@
                     }
 
                 }
-
+            }
                 @if (stars != 0 && booknum != 0)
                 {
                     rate = stars / booknum;
+                }
+                else
+                {
+                    rate = 0;
                 }
 
                 <tr>
@@ -63,11 +72,6 @@
                     <td></td>
                     <td>Average book rating: @rate</td>
                 </tr>
-
-                {
-                    stars = 0;
-                    booknum = 0;
-                }
 
             }
     </tbody>
